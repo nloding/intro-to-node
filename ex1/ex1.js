@@ -1,7 +1,7 @@
 #! /usr/local/bin/node
 
 var fs = require('fs');
-var crypto = require('crypto');
+var bombCrypto = require('../bombCrypto.js');
 var readline = require('readline');
 var rl = readline.createInterface({
   input: process.stdin,
@@ -34,7 +34,7 @@ var dumpCode = function(codeFile) {
     } else {
       console.log('The code is: ' + data);
       console.log('Decrypting the code...');
-      console.log('Decrypted code: ' + decrypt('aes-256-ctr', 'daltonsmustache', data));
+      console.log('Decrypted code: ' + bombCrypto.decrypt(data));
     }
   });
 }
@@ -45,13 +45,6 @@ var watchCode = function(codeFile) {
   var watch = fs.watch(codeFile, function(event, filename) {
     dumpCode(codeFile);
   });
-}
-
-var decrypt = function(algorithm, password, text){
-  var decipher = crypto.createDecipher(algorithm,password)
-  var dec = decipher.update(text,'hex','utf8')
-  dec += decipher.final('utf8');
-  return dec;
 }
 // endfunctions
 
