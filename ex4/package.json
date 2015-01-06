@@ -1,0 +1,23 @@
+{
+  "name": "ex4",
+  "version": "1.0.0",
+  "description": "Exercise 4",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nloding/intro-to-node"
+  },
+  "author": "Nathan Loding",
+  "license": "Free",
+  "bugs": {
+    "url": "https://github.com/nloding/intro-to-node/issues"
+  },
+  "homepage": "https://github.com/nloding/intro-to-node",
+  "dependencies": {
+    "express": "^4.10.7",
+    "socket.io": "^1.2.1"
+  }
+}
