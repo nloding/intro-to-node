@@ -24,7 +24,7 @@ var interval = setInterval(function() {
   crypto.randomBytes(48, function(ex, buf) {
     var token = buf.toString('hex');
     var content = 'CODES[' + new Date() + '] - ' + token + '\n';
-
+    console.log('Updating the disarm code.');
     fs.writeFile("./secretbombdisarmingcodes.txt", encrypt(content),
       function(err) {
         if (err) {

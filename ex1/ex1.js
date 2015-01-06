@@ -1,18 +1,53 @@
 #! /usr/local/bin/node
 
 var fs = require('fs');
-var codeFile = process.argv[2];
+var crypto = require('crypto');
+var readline = require('readline');
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-if (!codeFile || !fs.existsSync(codeFile)) {
-  console.log('Invalid file specified: ' + codeFile);
-  return;
+// functions
+var dumpCode = function(codeFile) {
+  var read = fs.readFile(codeFile, 'utf8', function(err, data) {
+    if (err) {
+      console.log('BOOOOOOOOOOOOOOOM! You\'re dead!');
+      throw err;
+    }
+
+    if (!data) {
+      console.log('No data was read... huh?');
+    } else {
+      console.log('The code is: ' + data);
+      console.log('Decrypting the code...');
+      console.log('Decrypted code: ' + decrypt('aes-256-ctr', 'daltonsmustache', data));
+    }
+  });
 }
 
-var read = fs.readFile(codeFile, 'utf8', function(err, data) {
-  if (err) {
-    console.log('BOOOOOOOOOOOOOOOM! You\'re dead!');
-    throw err;
+var watchCode = function(codeFile) {
+  console.log('Watching for changes...');
+
+  var watch = fs.watch(codeFile, function(event, filename) {
+    dumpCode(codeFile);
+  });
+}
+
+var decrypt = function(algorithm, password, text){
+  var decipher = crypto.createDecipher(algorithm,password)
+  var dec = decipher.update(text,'hex','utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
+// endfunctions
+
+rl.question("Which file has the disarm codes? ", function(answer) {
+  if (!answer || !fs.existsSync(answer)) {
+    console.log('You entered an invalid file, you\'re dead now.');
+    return;
   }
 
-  console.log('The code is: ' + data);
+  dumpCode(answer);
+  watchCode(answer);
 });
