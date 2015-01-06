@@ -9,6 +9,19 @@ var rl = readline.createInterface({
 });
 
 // functions
+var prompt = function() {
+  rl.question("Which file has the disarm codes? ", function(answer) {
+    if (!answer || !fs.existsSync(answer)) {
+      console.log('You entered an invalid file, jerk, try again...');
+      prompt();
+      return;
+    }
+
+    dumpCode(answer);
+    watchCode(answer);
+  });
+}
+
 var dumpCode = function(codeFile) {
   var read = fs.readFile(codeFile, 'utf8', function(err, data) {
     if (err) {
@@ -42,12 +55,4 @@ var decrypt = function(algorithm, password, text){
 }
 // endfunctions
 
-rl.question("Which file has the disarm codes? ", function(answer) {
-  if (!answer || !fs.existsSync(answer)) {
-    console.log('You entered an invalid file, you\'re dead now.');
-    return;
-  }
-
-  dumpCode(answer);
-  watchCode(answer);
-});
+prompt();
